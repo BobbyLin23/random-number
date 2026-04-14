@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a **Nuxt 3** + **Vue 3** application called "Random Generator" (随机生成器) - a feature-rich random generator supporting random numbers, food selection, and movie recommendations. Uses TypeScript, UnoCSS for styling, and Antfu's ESLint config.
+This is a **Nuxt 4** + **Vue 3** application called "Random Generator" (随机生成器) - a feature-rich random generator supporting random numbers, food selection, and movie recommendations. Uses TypeScript, UnoCSS for styling, and Antfu's ESLint config.
 
 ## Attention
 Use skills!!
