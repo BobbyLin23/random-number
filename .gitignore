@@ -17,6 +17,8 @@ logs
 .DS_Store
 .fleet
 .idea
+.superpowers
+.worktrees
 
 # Local env files
 .env
