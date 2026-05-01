@@ -277,10 +277,10 @@ indexes[swapIndex] = currentIndex
 Replace the current `<script setup lang="ts">` content with:
 
 ```ts
-import '@unocss/reset/tailwind.css'
-
 import type { GeneratorMode, GeneratorResult, ListConfig, ModeOption, NumberConfig } from '~/types/generator'
+
 import { foodPresets, moviePresets } from '~/data/generatorPresets'
+import '@unocss/reset/tailwind.css'
 
 const modes: ModeOption[] = [
   { value: 'number', label: '随机数字', description: '范围、数量、唯一值', icon: 'i-mdi-numeric' },
@@ -406,7 +406,9 @@ Replace the current `<template>` content with:
             <div i-mdi-shuffle-variant />
           </div>
           <div>
-            <p eyebrow m-0>Random Generator</p>
+            <p eyebrow m-0>
+              Random Generator
+            </p>
             <h1 m-0 text="xl [rgba(28,28,28,0.92)] dark:[rgba(243,239,230,0.94)]">
               随机生成器
             </h1>
@@ -422,7 +424,9 @@ Replace the current `<template>` content with:
       <div grid="~ cols-1 lg:cols-[minmax(0,0.95fr)_minmax(360px,0.75fr)] gap-5 lg:gap-7" flex-1 items-stretch>
         <section soft-panel bg="[rgba(255,255,255,0.34)] dark:[rgba(255,255,255,0.03)]" p="5 sm:6" flex="~ col gap-5">
           <div flex="~ col gap-2">
-            <p eyebrow m-0>Mode</p>
+            <p eyebrow m-0>
+              Mode
+            </p>
             <h2
               m-0
               text="[clamp(2.2rem,6vw,4.4rem)] [rgba(28,28,28,0.96)] dark:[rgba(243,239,230,0.96)]"
