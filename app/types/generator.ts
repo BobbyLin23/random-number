@@ -1,5 +1,7 @@
 export type GeneratorMode = 'number' | 'custom' | 'food' | 'movie'
 
+export type ThemeMode = 'light' | 'dark'
+
 export interface ModeOption {
   value: GeneratorMode
   label: string

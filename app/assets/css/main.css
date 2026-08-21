@@ -1,0 +1,79 @@
+@import '@unocss/reset/tailwind.css';
+
+:root {
+  --color-page: #ffffff;
+  --color-panel: #fafafa;
+  --color-ink: #111111;
+  --color-ink-muted: #525252;
+  --color-ink-faint: #a3a3a3;
+  --color-line: #e5e5e5;
+  --color-line-strong: #d4d4d4;
+  --color-accent: #4f46e5;
+  --color-accent-soft: #eef2ff;
+  --color-danger: #dc2626;
+  --color-inverted-page: #111111;
+  --color-inverted-ink: #f5f5f5;
+  --color-inverted-muted: #a3a3a3;
+  --font-sans:
+    'Inter', -apple-system, 'BlinkMacSystemFont', 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC',
+    'Microsoft YaHei', sans-serif;
+  color-scheme: light;
+}
+
+html.dark {
+  --color-page: #0a0a0a;
+  --color-panel: #141414;
+  --color-ink: #f5f5f5;
+  --color-ink-muted: #a3a3a3;
+  --color-ink-faint: #737373;
+  --color-line: #262626;
+  --color-line-strong: #3f3f3f;
+  --color-accent: #818cf8;
+  --color-accent-soft: #1e1b4b;
+  --color-danger: #f87171;
+  --color-inverted-page: #f5f5f5;
+  --color-inverted-ink: #111111;
+  --color-inverted-muted: #525252;
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-page);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#__nuxt {
+  min-height: 100vh;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-page);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

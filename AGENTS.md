@@ -9,10 +9,10 @@ Use skills!!
 
 ## Tech Stack
 
-- **Framework**: Nuxt 3.15.4 with Vue 3.5.13
+- **Framework**: Nuxt 4.5.2 with Vue 3.5.41 (source in `app/`)
 - **Language**: TypeScript 5.7.3
-- **Styling**: UnoCSS (65.4.3) + @unocss/reset/tailwind.css
-- **UI Components**: Vue Sonner for toasts
+- **Styling**: UnoCSS (66.8) + @unocss/reset/tailwind.css
+- **Design System**: Minimal Swiss — CSS variables in `app/assets/css/main.css`, mapped to UnoCSS theme colors in `uno.config.ts`
 - **Icons**: Iconify (via UnoCSS preset-icons)
 - **Linting**: oxlint (1.79) with migrated @antfu/eslint-config rules
 - **Formatting**: oxfmt (0.64) with import sorting
@@ -46,13 +46,12 @@ pnpm postinstall      # Prepare nuxt (runs type generation)
 
 - Use ES modules (`import/export`) exclusively
 - Order: Vue/Nuxt imports → Third-party → Local/Relative
-- Auto-imports are enabled via Nuxt (no need to import `ref`, `computed`, etc.)
-- Explicit imports preferred for clarity on composables
+- Auto-imports are enabled via Nuxt (no need to import `ref`, `computed`, etc., or composables in `app/composables/`)
+- Explicit imports for files in `app/data/` and `app/types/` (not auto-imported)
 
 ```typescript
-import type { Movie } from '~/types'
-// Good
-import { toast } from 'vue-sonner'
+import { foodPresets } from '~/data/generatorPresets'
+import type { GeneratorMode } from '~/types/generator'
 ```
 
 ### Formatting
@@ -111,26 +110,28 @@ type TabType = 'number' | 'food' | 'movie'
 - Place pages in `pages/` (file-based routing)
 - Place composables in `composables/` (auto-imported)
 
-### Styling (UnoCSS)
+### Styling (UnoCSS + Minimal Swiss design system)
 
-- Use UnoCSS utility classes exclusively (no custom CSS except for animations)
-- Use attributify mode: `<div flex="~ items-center gap-4">`
-- Use shortcuts defined in `uno.config.ts` (e.g., `btn-primary`, `card`, `input`)
-- Custom animations defined in `<style>` blocks when needed
-- Use `dark:` variant for dark mode styles
-- Color palette: slate (grays), blue/indigo (primary), orange/red (accent), purple (secondary)
+- **No border-radius, no shadows, no gradients** — Minimal Swiss style. Sharp corners, 1px `border-line` borders, high-contrast black/white + single indigo accent.
+- Use UnoCSS utility classes; design tokens live as CSS variables in `app/assets/css/main.css` (`--color-*`, `--font-sans`) and are mapped to UnoCSS theme colors (`bg-page`, `text-ink`, `border-line`, `text-accent`, etc.)
+- Use shortcuts defined in `uno.config.ts` (`panel`, `input`, `btn-primary`, `btn-ghost`, `field-label`, `container`, `tab-active`/`tab-inactive`)
+- Custom animations defined in `<style>` blocks when needed (e.g., result transition)
+- Theme colors via CSS variables (`bg-page` light/dark), not `dark:` variants for every element
+- Color palette: `page`/`panel` backgrounds, `ink`/`muted`/`faint` text, `line` borders, `accent` (indigo), `danger` (red), `inverted` for the dark result panel
 
 ```html
 <!-- Good -->
-<div flex="~ items-center gap-2" text-lg font-bold text-slate-800 dark:text-white>
-  <div i-mdi-history text-blue-500 />
-  <span>History</span>
-</div>
+<section class="panel flex flex-col gap-6 p-5 sm:p-8">
+  <button type="button" class="btn-primary cursor-pointer" @click="generate">
+    <span class="i-mdi-dice-multiple-outline" aria-hidden="true" />
+    生成
+  </button>
+</section>
 ```
 
 ### Error Handling
 
-- Use `vue-sonner` for toast notifications: `toast.success()`, `toast.error()`, `toast.info()`
+- Validation errors are thrown from `useRandomGenerator` and rendered inline as red text (`text-danger`) in the config panel
 - Handle errors at component level with try/catch
 - Validate user input before processing
 - Use early returns for guard clauses
@@ -138,16 +139,13 @@ type TabType = 'number' | 'food' | 'movie'
 
 ```typescript
 // Good
-function generateNumbers() {
-  const { min, max, count, unique } = numberConfig
-  if (min > max) {
-    toast.error('最小值不能大于最大值！')
-    return
+function generate() {
+  try {
+    errorMessage.value = ''
+    result.value = generateNumbers(numberConfig)
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : '生成失败，请检查输入。'
   }
-  if (unique && count > (max - min + 1)) {
-    toast.error('唯一模式下，生成数量不能超过范围大小！')
-  }
-  // ... rest of logic
 }
 ```
 
@@ -155,15 +153,29 @@ function generateNumbers() {
 
 ```
 /Users/linzhangsheng/Desktop/project/random-number/
-├── app.vue              # Root app component
-├── pages/
-│   └── index.vue       # Main page (all features here)
-├── nuxt.config.ts      # Nuxt configuration
-├── uno.config.ts       # UnoCSS configuration (shortcuts, theme)
-├── .oxlintrc.json      # Oxlint configuration (migrated from @antfu/eslint-config)
-├── .oxfmtrc.json       # Oxfmt formatter configuration
-├── tsconfig.json       # TypeScript config (extends .nuxt/tsconfig.json)
-├── package.json        # Dependencies & scripts
+├── app/
+│   ├── app.vue                # Root app shell (<NuxtPage/> + useHead)
+│   ├── assets/css/main.css   # Design tokens: CSS variables (light/dark)
+│   ├── pages/
+│   │   └── index.vue         # Main page (mode state, generation orchestration)
+│   ├── components/           # Auto-imported UI components
+│   │   ├── AppHeader.vue     # Brand + theme toggle
+│   │   ├── ModeTabs.vue      # Mode selector tabs
+│   │   ├── NumberConfigPanel.vue  # Number settings + toggles
+│   │   ├── ListConfigPanel.vue    # Custom list settings + toggles
+│   │   ├── ResultPanel.vue   # Inverted-color result panel + copy
+│   │   └── ToggleSwitch.vue  # Reusable switch (v-model)
+│   ├── composables/
+│   │   ├── useRandomGenerator.ts  # Generation/validation logic
+│   │   └── useTheme.ts       # Theme state, persistence, system listener
+│   ├── data/generatorPresets.ts   # Food/movie presets
+│   └── types/generator.ts    # Shared types
+├── nuxt.config.ts            # Nuxt config (CSS, fonts, anti-FOUC script)
+├── uno.config.ts             # UnoCSS config (theme colors, shortcuts)
+├── .oxlintrc.json            # Oxlint configuration (migrated from @antfu/eslint-config)
+├── .oxfmtrc.json             # Oxfmt formatter configuration
+├── tsconfig.json             # TypeScript config (extends .nuxt/tsconfig.json)
+├── package.json              # Dependencies & scripts
 └── README.md
 ```
 
@@ -175,12 +187,12 @@ function generateNumbers() {
 
 3. **No tests**: The project has no test suite configured. Manual testing in browser required.
 
-4. **pnpm only**: Uses pnpm@9.15.4. Don't use npm/yarn.
+4. **pnpm only**: Uses pnpm@11.22.0. Don't use npm/yarn.
 
-5. **UnoCSS attributify**: Use `flex="~ items-center gap-4"` syntax, not `class="flex items-center gap-4"`.
+5. **UnoCSS shortcuts**: Prefer shortcuts (`panel`, `btn-primary`, `input`) over raw utility strings for repeated elements.
 
-6. **Vue auto-imports**: `ref`, `computed`, `watch`, etc. are auto-imported by Nuxt.
+6. **Vue auto-imports**: `ref`, `computed`, `watch`, etc. are auto-imported by Nuxt, as are components in `app/components/` and composables in `app/composables/`.
 
 7. **Icon usage**: Use `i-mdi-{icon-name}` classes for Material Design Icons.
 
-8. **Dark mode**: Built-in via `dark:` prefix. Uses class strategy (`dark: 'class'`).
+8. **Dark mode**: Class strategy (`html.dark`), driven by CSS variables in `app/assets/css/main.css`. An inline anti-FOUC script in `nuxt.config.ts` applies the stored/system theme before first paint; `useTheme` manages state, persistence (key `random-generator-theme`), and system-preference changes.

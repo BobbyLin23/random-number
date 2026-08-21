@@ -1,21 +1,42 @@
 import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss'
 
+const cssVar = (name: string) => `var(--color-${name})`
+
 export default defineConfig({
+  theme: {
+    colors: {
+      'page': cssVar('page'),
+      'panel': cssVar('panel'),
+      'ink': cssVar('ink'),
+      'muted': cssVar('ink-muted'),
+      'faint': cssVar('ink-faint'),
+      'line': cssVar('line'),
+      'line-strong': cssVar('line-strong'),
+      'accent': cssVar('accent'),
+      'accent-soft': cssVar('accent-soft'),
+      'danger': cssVar('danger'),
+      'inverted': {
+        page: cssVar('inverted-page'),
+        ink: cssVar('inverted-ink'),
+        muted: cssVar('inverted-muted'),
+      },
+    },
+    fontFamily: {
+      sans: 'var(--font-sans)',
+    },
+  },
   shortcuts: {
-    'page-shell':
-      'min-h-screen bg-[#f7f4ed] text-[#1c1c1c] transition-colors duration-300 dark:bg-[#161514] dark:text-[#f3efe6]',
-    'page-border': 'border border-[#eceae4] dark:border-[#3a3833]',
-    'soft-panel': 'rounded-[28px] border border-[#eceae4] dark:border-[#3a3833]',
-    'section-frame': 'mx-auto w-full max-w-[1200px] px-5 sm:px-6 lg:px-8',
-    'eyebrow':
-      'text-[11px] uppercase tracking-[0.3em] text-[rgba(28,28,28,0.55)] dark:text-[rgba(243,239,230,0.58)]',
-    'ghost-button':
-      'inline-flex items-center gap-2 rounded-full border border-[rgba(28,28,28,0.22)] px-4 py-2 text-sm text-[#1c1c1c] transition-all duration-200 hover:bg-[rgba(28,28,28,0.04)] dark:border-[rgba(243,239,230,0.18)] dark:text-[#f3efe6] dark:hover:bg-[rgba(243,239,230,0.06)]',
-    'primary-button':
-      'inline-flex items-center justify-center gap-2 rounded-full bg-[#1c1c1c] px-5 py-3 text-sm text-[#fcfbf8] transition-all duration-200 hover:opacity-90 dark:bg-[#f3efe6] dark:text-[#161514]',
-    'metric-card': 'soft-panel bg-[rgba(255,255,255,0.36)] p-5 dark:bg-[rgba(255,255,255,0.03)]',
-    'input-shell':
-      'w-full rounded-[18px] border border-[#eceae4] bg-[rgba(255,255,255,0.48)] px-4 py-3 text-base text-[#1c1c1c] outline-none transition-all duration-200 placeholder:text-[#6f6b63] focus:border-[rgba(28,28,28,0.4)] focus:bg-[rgba(255,255,255,0.72)] dark:border-[#3a3833] dark:bg-[rgba(255,255,255,0.03)] dark:text-[#f3efe6] dark:placeholder:text-[#9c968c] dark:focus:border-[rgba(243,239,230,0.28)] dark:focus:bg-[rgba(255,255,255,0.05)]',
+    'container': 'mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8',
+    'panel': 'border border-line bg-panel',
+    'field-label': 'block text-xs font-semibold uppercase tracking-[0.14em] text-muted',
+    'input':
+      'w-full border border-line bg-page px-3 py-2.5 text-base text-ink outline-none transition-colors duration-200 placeholder:text-faint focus:border-accent',
+    'btn-primary':
+      'inline-flex items-center justify-center gap-2 border border-ink bg-ink px-6 py-3 text-sm font-semibold text-page transition-colors duration-200 hover:border-accent hover:bg-accent active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50',
+    'btn-ghost':
+      'inline-flex items-center justify-center gap-2 border border-line bg-page px-4 py-2.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-ink disabled:cursor-not-allowed disabled:opacity-50',
+    'tab-active': 'border-ink bg-ink text-page hover:bg-ink',
+    'tab-inactive': 'border-line bg-page text-ink hover:border-ink',
   },
   presets: [presetUno(), presetAttributify(), presetIcons()],
 })
