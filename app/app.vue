@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { foodPresets, moviePresets } from '~/data/generatorPresets'
 import type {
   GeneratorMode,
   GeneratorResult,
@@ -7,14 +8,23 @@ import type {
   NumberConfig,
 } from '~/types/generator'
 
-import { foodPresets, moviePresets } from '~/data/generatorPresets'
 import '@unocss/reset/tailwind.css'
 
 const modes: ModeOption[] = [
   { value: 'number', label: '随机数字', description: '范围、数量、唯一值', icon: 'i-mdi-numeric' },
-  { value: 'custom', label: '自定义', description: '从你的清单抽取', icon: 'i-mdi-format-list-bulleted' },
+  {
+    value: 'custom',
+    label: '自定义',
+    description: '从你的清单抽取',
+    icon: 'i-mdi-format-list-bulleted',
+  },
   { value: 'food', label: '吃什么', description: '内置餐食灵感', icon: 'i-mdi-food-outline' },
-  { value: 'movie', label: '看什么', description: '内置电影类型', icon: 'i-mdi-movie-open-outline' },
+  {
+    value: 'movie',
+    label: '看什么',
+    description: '内置电影类型',
+    icon: 'i-mdi-movie-open-outline',
+  },
 ]
 
 const activeMode = ref<GeneratorMode>('number')
@@ -43,11 +53,15 @@ const presetListConfig = reactive<ListConfig>({
   unique: true,
 })
 
-const activeModeOption = computed(() => modes.find(mode => mode.value === activeMode.value) ?? modes[0])
+const activeModeOption = computed(
+  () => modes.find(mode => mode.value === activeMode.value) ?? modes[0],
+)
 const resultTitle = computed(() => result.value?.values.join('、') ?? '点击生成')
 const resultMeta = computed(() => result.value?.meta ?? '随机数字优先，其它模式随时切换')
-const themeLabel = computed(() => theme.value === 'dark' ? '切换浅色' : '切换深色')
-const activeListConfig = computed(() => activeMode.value === 'custom' ? customListConfig : presetListConfig)
+const themeLabel = computed(() => (theme.value === 'dark' ? '切换浅色' : '切换深色'))
+const activeListConfig = computed(() =>
+  activeMode.value === 'custom' ? customListConfig : presetListConfig,
+)
 
 const modePresetItems = computed(() => {
   if (activeMode.value === 'food') {
@@ -89,11 +103,11 @@ function onModeChange(mode: GeneratorMode) {
 function generate() {
   try {
     errorMessage.value = ''
-    result.value = activeMode.value === 'number'
-      ? generateNumbers(numberConfig)
-      : generateListResult(activeMode.value, activeListConfig.value, modePresetItems.value)
-  }
-  catch (error) {
+    result.value =
+      activeMode.value === 'number'
+        ? generateNumbers(numberConfig)
+        : generateListResult(activeMode.value, activeListConfig.value, modePresetItems.value)
+  } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : '生成失败，请检查输入。'
   }
 }
@@ -132,16 +146,13 @@ useHead({
 
 <template>
   <main page-shell min-h-screen overflow-x-hidden :style="{ fontFamily: 'var(--font-body)' }">
-    <section
-      section-frame
-      min-h-screen
-      flex="~ col"
-      py-6 md:py-8
-    >
+    <section section-frame min-h-screen flex="~ col" py-6 md:py-8>
       <header flex="~ items-center justify-between gap-4" pb-6>
         <div flex="~ items-center gap-3">
           <div
-            h-11 w-11 rounded-full
+            h-11
+            w-11
+            rounded-full
             border="1 [rgba(28,28,28,0.08)] dark:[rgba(243,239,230,0.12)]"
             bg="[rgba(255,255,255,0.45)] dark:[rgba(255,255,255,0.04)]"
             flex="~ items-center justify-center"
@@ -150,17 +161,15 @@ useHead({
             <div i-mdi-shuffle-variant />
           </div>
           <div>
-            <p eyebrow m-0>
-              随机工具
-            </p>
-            <h1 m-0 text="xl [rgba(28,28,28,0.92)] dark:[rgba(243,239,230,0.94)]">
-              随机生成器
-            </h1>
+            <p eyebrow m-0>随机工具</p>
+            <h1 m-0 text="xl [rgba(28,28,28,0.92)] dark:[rgba(243,239,230,0.94)]">随机生成器</h1>
           </div>
         </div>
 
         <button ghost-button type="button" @click="toggleTheme">
-          <div :class="theme === 'dark' ? 'i-mdi-white-balance-sunny' : 'i-mdi-moon-waning-crescent'" />
+          <div
+            :class="theme === 'dark' ? 'i-mdi-white-balance-sunny' : 'i-mdi-moon-waning-crescent'"
+          />
           <span hidden sm:inline>{{ themeLabel }}</span>
         </button>
       </header>
@@ -177,9 +186,7 @@ useHead({
           flex="~ col gap-5"
         >
           <div flex="~ col gap-2">
-            <p eyebrow m-0>
-              生成模式
-            </p>
+            <p eyebrow m-0>生成模式</p>
             <h2
               m-0
               text="[clamp(2.2rem,6vw,4.4rem)] [rgba(28,28,28,0.96)] dark:[rgba(243,239,230,0.96)]"
@@ -187,10 +194,10 @@ useHead({
               tracking="[-0.05em]"
               :style="{ fontFamily: 'var(--font-display)' }"
             >
-              {{ activeModeOption.label }}
+              {{ activeModeOption?.label }}
             </h2>
             <p m-0 text="[rgba(28,28,28,0.62)] dark:[rgba(243,239,230,0.68)]">
-              {{ activeModeOption.description }}
+              {{ activeModeOption?.description }}
             </p>
           </div>
 
@@ -217,11 +224,21 @@ useHead({
           <div v-if="activeMode === 'number'" grid="~ cols-1 sm:cols-3 gap-4">
             <label flex="~ col gap-2">
               <span text-sm text="[rgba(28,28,28,0.68)] dark:[rgba(243,239,230,0.72)]">最小值</span>
-              <input v-model.number="numberConfig.min" class="input-shell" type="number" inputmode="numeric">
+              <input
+                v-model.number="numberConfig.min"
+                class="input-shell"
+                type="number"
+                inputmode="numeric"
+              />
             </label>
             <label flex="~ col gap-2">
               <span text-sm text="[rgba(28,28,28,0.68)] dark:[rgba(243,239,230,0.72)]">最大值</span>
-              <input v-model.number="numberConfig.max" class="input-shell" type="number" inputmode="numeric">
+              <input
+                v-model.number="numberConfig.max"
+                class="input-shell"
+                type="number"
+                inputmode="numeric"
+              />
             </label>
             <label flex="~ col gap-2">
               <span text-sm text="[rgba(28,28,28,0.68)] dark:[rgba(243,239,230,0.72)]">数量</span>
@@ -231,7 +248,7 @@ useHead({
                 type="number"
                 min="1"
                 inputmode="numeric"
-              >
+              />
             </label>
           </div>
 
@@ -255,29 +272,53 @@ useHead({
                 type="number"
                 min="1"
                 inputmode="numeric"
-              >
+              />
             </label>
           </div>
 
           <div flex="~ wrap gap-3">
             <label v-if="activeMode === 'number'" ghost-button cursor-pointer>
-              <input v-model="numberConfig.unique" type="checkbox" sr-only>
-              <div :class="numberConfig.unique ? 'i-mdi-checkbox-marked-circle' : 'i-mdi-checkbox-blank-circle-outline'" />
+              <input v-model="numberConfig.unique" type="checkbox" sr-only />
+              <div
+                :class="
+                  numberConfig.unique
+                    ? 'i-mdi-checkbox-marked-circle'
+                    : 'i-mdi-checkbox-blank-circle-outline'
+                "
+              />
               唯一数字
             </label>
             <label v-if="activeMode === 'number'" ghost-button cursor-pointer>
-              <input v-model="numberConfig.integer" type="checkbox" sr-only>
-              <div :class="numberConfig.integer ? 'i-mdi-checkbox-marked-circle' : 'i-mdi-checkbox-blank-circle-outline'" />
+              <input v-model="numberConfig.integer" type="checkbox" sr-only />
+              <div
+                :class="
+                  numberConfig.integer
+                    ? 'i-mdi-checkbox-marked-circle'
+                    : 'i-mdi-checkbox-blank-circle-outline'
+                "
+              />
               整数
             </label>
             <label v-if="activeMode === 'number'" ghost-button cursor-pointer>
-              <input v-model="numberConfig.sort" type="checkbox" sr-only>
-              <div :class="numberConfig.sort ? 'i-mdi-checkbox-marked-circle' : 'i-mdi-checkbox-blank-circle-outline'" />
+              <input v-model="numberConfig.sort" type="checkbox" sr-only />
+              <div
+                :class="
+                  numberConfig.sort
+                    ? 'i-mdi-checkbox-marked-circle'
+                    : 'i-mdi-checkbox-blank-circle-outline'
+                "
+              />
               排序
             </label>
             <label v-if="activeMode !== 'number'" ghost-button cursor-pointer>
-              <input v-model="activeListConfig.unique" type="checkbox" sr-only>
-              <div :class="activeListConfig.unique ? 'i-mdi-checkbox-marked-circle' : 'i-mdi-checkbox-blank-circle-outline'" />
+              <input v-model="activeListConfig.unique" type="checkbox" sr-only />
+              <div
+                :class="
+                  activeListConfig.unique
+                    ? 'i-mdi-checkbox-marked-circle'
+                    : 'i-mdi-checkbox-blank-circle-outline'
+                "
+              />
               唯一结果
             </label>
           </div>
@@ -289,7 +330,7 @@ useHead({
           <button
             type="button"
             class="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm transition-opacity duration-200 hover:opacity-90"
-            style="background: #1c1c1c; color: #fcfbf8;"
+            style="background: #1c1c1c; color: #fcfbf8"
             @click="generate"
           >
             <div i-mdi-dice-multiple-outline />

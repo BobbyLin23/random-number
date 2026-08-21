@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": true,
+  "quoteProps": "consistent",
+  "arrowParens": "avoid",
+  "sortImports": true,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "node_modules",
+    ".git",
+    ".nuxt",
+    ".output",
+    ".data",
+    ".nitro",
+    ".cache",
+    "dist",
+    ".agents",
+    ".vscode",
+    "docs",
+    "**/*.md",
+    "**/pnpm-lock.yaml"
+  ]
+}

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a **Nuxt 4** + **Vue 3** application called "Random Generator" (随机生成器) - a feature-rich random generator supporting random numbers, food selection, and movie recommendations. Uses TypeScript, UnoCSS for styling, and Antfu's ESLint config.
+This is a **Nuxt 4** + **Vue 3** application called "Random Generator" (随机生成器) - a feature-rich random generator supporting random numbers, food selection, and movie recommendations. Uses TypeScript, UnoCSS for styling, and oxlint + oxfmt for linting and formatting (migrated from @antfu/eslint-config).
 
 ## Attention
 Use skills!!
@@ -14,7 +14,8 @@ Use skills!!
 - **Styling**: UnoCSS (65.4.3) + @unocss/reset/tailwind.css
 - **UI Components**: Vue Sonner for toasts
 - **Icons**: Iconify (via UnoCSS preset-icons)
-- **Linting**: ESLint 9 with @antfu/eslint-config
+- **Linting**: oxlint (1.79) with migrated @antfu/eslint-config rules
+- **Formatting**: oxfmt (0.64) with import sorting
 
 ## Build/Lint/Test Commands
 
@@ -27,9 +28,11 @@ pnpm build            # Build for production
 pnpm generate         # Generate static site
 pnpm preview          # Preview production build
 
-# Linting (CRITICAL - must pass)
-pnpm lint             # Check linting
-pnpm lint:fix         # Fix linting issues
+# Linting & formatting (CRITICAL - must pass)
+pnpm lint             # Check linting + formatting
+pnpm lint:fix         # Fix linting issues + format code
+pnpm format           # Format code (oxfmt)
+pnpm format:check     # Check formatting (oxfmt --check)
 
 # Type checking (via nuxt prepare)
 pnpm postinstall      # Prepare nuxt (runs type generation)
@@ -56,7 +59,7 @@ import { toast } from 'vue-sonner'
 
 - **Indent**: 2 spaces
 - **Quotes**: Single quotes for JS/TS strings
-- **Semicolons**: No semicolons (Antfu ESLint config)
+- **Semicolons**: No semicolons (oxfmt/oxlint style rules)
 - **Trailing commas**: Always (multiline)
 - **Line width**: ~100 characters (be reasonable)
 
@@ -157,7 +160,8 @@ function generateNumbers() {
 │   └── index.vue       # Main page (all features here)
 ├── nuxt.config.ts      # Nuxt configuration
 ├── uno.config.ts       # UnoCSS configuration (shortcuts, theme)
-├── eslint.config.js    # ESLint configuration (@antfu/eslint-config)
+├── .oxlintrc.json      # Oxlint configuration (migrated from @antfu/eslint-config)
+├── .oxfmtrc.json       # Oxfmt formatter configuration
 ├── tsconfig.json       # TypeScript config (extends .nuxt/tsconfig.json)
 ├── package.json        # Dependencies & scripts
 └── README.md

@@ -82,14 +82,12 @@ export function generateNumbers(config: NumberConfig): GeneratorResult {
   if (config.integer) {
     if (config.unique) {
       values = pickIndexes(max - min + 1, config.count, true).map(index => min + index)
-    }
-    else {
+    } else {
       values = Array.from({ length: config.count }, () => {
         return Math.floor(Math.random() * (max - min + 1)) + min
       })
     }
-  }
-  else {
+  } else {
     values = Array.from({ length: config.count }, () => {
       return Number((Math.random() * (max - min) + min).toFixed(2))
     })
