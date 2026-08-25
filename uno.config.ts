@@ -26,7 +26,7 @@ export default defineConfig({
     },
   },
   shortcuts: {
-    'container': 'mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8',
+    'container': 'mx-auto w-full max-w-8xl px-4 sm:px-6 lg:px-8',
     'panel': 'border border-line bg-panel',
     'field-label': 'block text-xs font-semibold uppercase tracking-[0.14em] text-muted',
     'input':

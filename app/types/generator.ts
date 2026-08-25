@@ -1,4 +1,4 @@
-export type GeneratorMode = 'number' | 'custom' | 'food' | 'movie'
+export type GeneratorMode = 'number' | 'custom' | 'food' | 'movie' | 'agent'
 
 export type ThemeMode = 'light' | 'dark'
 

@@ -23,3 +23,13 @@ export const moviePresets = [
   '爱情片',
   '治愈系电影',
 ] as const
+
+export const agentPresets = [
+  'Codex',
+  'Cursor',
+  'Factory Droid',
+  'ZCode',
+  'Copilot',
+  'amp',
+  'OpenCode',
+] as const

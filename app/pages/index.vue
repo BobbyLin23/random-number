@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { foodPresets, moviePresets } from '~/data/generatorPresets'
+import { agentPresets, foodPresets, moviePresets } from '~/data/generatorPresets'
 import type {
   GeneratorMode,
   GeneratorResult,
@@ -34,6 +34,12 @@ const modes: ModeOption[] = [
     label: '看什么',
     description: '内置电影类型，也可以追加你的选择',
     icon: 'i-mdi-movie-open-outline',
+  },
+  {
+    value: 'agent',
+    label: '选 Agent',
+    description: '内置常用 AI 编程 Agent，也可以追加你的选择',
+    icon: 'i-mdi-robot-outline',
   },
 ]
 
@@ -77,6 +83,10 @@ const presetItems = computed(() => {
 
   if (activeMode.value === 'movie') {
     return moviePresets
+  }
+
+  if (activeMode.value === 'agent') {
+    return agentPresets
   }
 
   return []

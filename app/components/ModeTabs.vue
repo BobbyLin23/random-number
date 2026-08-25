@@ -12,7 +12,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <nav aria-label="生成模式" class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+  <nav aria-label="生成模式" class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
     <button
       v-for="mode in modes"
       :key="mode.value"
