@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# No authentication or backing services need repair. Dependencies and generated
+# Nuxt types persist in the orb; never reinstall them on resume.
+printf 'Orb ready; dependencies were prepared during setup.\n'

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+# The orb base image provides Node.js and pnpm. pnpm honors package.json's
+# packageManager pin; keep dependencies and generated Nuxt types in the snapshot.
+printf 'Toolchain: Node %s, pnpm %s\n' "$(node --version)" "$(pnpm --version)"
+printf 'Installing locked dependencies and preparing Nuxt…\n'
+time pnpm install --frozen-lockfile
