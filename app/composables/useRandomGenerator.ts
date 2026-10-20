@@ -97,10 +97,20 @@ export function generateNumbers(config: NumberConfig): GeneratorResult {
     values = [...values].sort((left, right) => left - right)
   }
 
+  const details = [`范围 ${config.min} 到 ${config.max}`]
+
+  if (config.unique) {
+    details.push('不重复')
+  }
+
+  if (!config.integer) {
+    details.push('含小数')
+  }
+
   return {
     mode: 'number',
     values,
-    meta: `${config.min} - ${config.max}`,
+    meta: details.join('，'),
   }
 }
 
@@ -118,7 +128,7 @@ export function generateListResult(
 
   return {
     mode,
-    values: pickIndexes(items.length, config.count, config.unique).map(index => items[index]),
-    meta: `${items.length} 个可选项`,
+    values: pickIndexes(items.length, config.count, config.unique).map(index => items[index]!),
+    meta: `从 ${items.length} 个选项里抽出`,
   }
 }

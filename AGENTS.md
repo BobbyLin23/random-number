@@ -12,7 +12,7 @@ Use skills!!
 - **Framework**: Nuxt 4.5.2 with Vue 3.5.41 (source in `app/`)
 - **Language**: TypeScript 5.7.3
 - **Styling**: UnoCSS (66.8) + @unocss/reset/tailwind.css
-- **Design System**: Minimal Swiss — CSS variables in `app/assets/css/main.css`, mapped to UnoCSS theme colors in `uno.config.ts`
+- **Design System**: "抽签处" two-ink print system — newsprint paper, ink black, ultramarine ticket. CSS variables in `app/assets/css/main.css`, mapped to UnoCSS theme colors in `uno.config.ts`
 - **Icons**: Iconify (via UnoCSS preset-icons)
 - **Linting**: oxlint (1.79) with migrated @antfu/eslint-config rules
 - **Formatting**: oxfmt (0.64) with import sorting
@@ -110,28 +110,29 @@ type TabType = 'number' | 'food' | 'movie'
 - Place pages in `pages/` (file-based routing)
 - Place composables in `composables/` (auto-imported)
 
-### Styling (UnoCSS + Minimal Swiss design system)
+### Styling (UnoCSS + "抽签处" print system)
 
-- **No border-radius, no shadows, no gradients** — Minimal Swiss style. Sharp corners, 1px `border-line` borders, high-contrast black/white + single indigo accent.
-- Use UnoCSS utility classes; design tokens live as CSS variables in `app/assets/css/main.css` (`--color-*`, `--font-sans`) and are mapped to UnoCSS theme colors (`bg-page`, `text-ink`, `border-line`, `text-accent`, etc.)
-- Use shortcuts defined in `uno.config.ts` (`panel`, `input`, `btn-primary`, `btn-ghost`, `field-label`, `container`, `tab-active`/`tab-inactive`)
-- Custom animations defined in `<style>` blocks when needed (e.g., result transition)
+- **Two inks on paper**: newsprint grey pages, ink-black type, one ultramarine block for the draw ticket. Sharp corners, 1px rules, no shadows, no gradients, no rounded cards.
+- Use UnoCSS utility classes; design tokens live as CSS variables in `app/assets/css/main.css` (`--color-*`, `--font-sans`, `--font-serif`) and are mapped to UnoCSS theme colors (`bg-page`, `text-ink`, `border-line`, `bg-field`, `text-field-ink`, `bg-stub`, etc.)
+- Use shortcuts defined in `uno.config.ts` (`container`, `input`, `field-label`, `btn-quiet`, `tnum`)
+- Type: results and the wordmark use `font-serif` (Songti SC / Noto Serif CJK SC), UI uses the system sans stack. Result sizing is computed in `ResultPanel.vue` from character widths and the field's container width (`--size-factor` + `cqw`), so long values shrink instead of overflowing.
 - Theme colors via CSS variables (`bg-page` light/dark), not `dark:` variants for every element
-- Color palette: `page`/`panel` backgrounds, `ink`/`muted`/`faint` text, `line` borders, `accent` (indigo), `danger` (red), `inverted` for the dark result panel
+- Color palette: `page`/`plate` backgrounds, `ink`/`muted`/`faint` text, `line` borders, `accent` (ultramarine), `field` (ticket field + its ink/muted/line), `stub` (control bar + its ink/line/hover), `danger` (red)
+- The ticket field is a single bold element; keep everything around it quiet.
 
 ```html
 <!-- Good -->
-<section class="panel flex flex-col gap-6 p-5 sm:p-8">
-  <button type="button" class="btn-primary cursor-pointer" @click="generate">
-    <span class="i-mdi-dice-multiple-outline" aria-hidden="true" />
-    生成
-  </button>
+<section class="on-field flex min-h-[460px] flex-col">
+  <div class="flex flex-1 flex-col bg-field text-field-ink">...</div>
+  <div class="on-stub bg-stub text-stub-ink">
+    <button type="button" class="hover:bg-stub-hover">抽 1 个数字</button>
+  </div>
 </section>
 ```
 
 ### Error Handling
 
-- Validation errors are thrown from `useRandomGenerator` and rendered inline as red text (`text-danger`) in the config panel
+- Validation errors are thrown from `useRandomGenerator` and rendered inside the ticket field above the draw button (`text-field-danger`)
 - Handle errors at component level with try/catch
 - Validate user input before processing
 - Use early returns for guard clauses
@@ -161,16 +162,17 @@ function generate() {
 │   ├── components/           # Auto-imported UI components
 │   │   ├── AppHeader.vue     # Brand + theme toggle
 │   │   ├── ModeTabs.vue      # Mode selector tabs
-│   │   ├── NumberConfigPanel.vue  # Number settings + toggles
-│   │   ├── ListConfigPanel.vue    # Custom list settings + toggles
-│   │   ├── ResultPanel.vue   # Inverted-color result panel + copy
-│   │   └── ToggleSwitch.vue  # Reusable switch (v-model)
+│   │   ├── NumberConfigPanel.vue  # Number range, count, options
+│   │   ├── ListConfigPanel.vue    # List input, count, options
+│   │   ├── ResultPanel.vue   # Ticket field: result, serial, draw + copy
+│   │   ├── CountStepper.vue  # − / n / + control (v-model)
+│   │   └── CheckOption.vue   # Square checkbox with label (v-model)
 │   ├── composables/
 │   │   ├── useRandomGenerator.ts  # Generation/validation logic
 │   │   └── useTheme.ts       # Theme state, persistence, system listener
 │   ├── data/generatorPresets.ts   # Food/movie presets
 │   └── types/generator.ts    # Shared types
-├── nuxt.config.ts            # Nuxt config (CSS, fonts, anti-FOUC script)
+├── nuxt.config.ts            # Nuxt config (CSS, anti-FOUC script)
 ├── uno.config.ts             # UnoCSS config (theme colors, shortcuts)
 ├── .oxlintrc.json            # Oxlint configuration (migrated from @antfu/eslint-config)
 ├── .oxfmtrc.json             # Oxfmt formatter configuration
@@ -189,7 +191,7 @@ function generate() {
 
 4. **pnpm only**: Uses pnpm@11.22.0. Don't use npm/yarn.
 
-5. **UnoCSS shortcuts**: Prefer shortcuts (`panel`, `btn-primary`, `input`) over raw utility strings for repeated elements.
+5. **UnoCSS shortcuts**: Prefer shortcuts (`container`, `input`, `field-label`, `btn-quiet`) over raw utility strings for repeated elements.
 
 6. **Vue auto-imports**: `ref`, `computed`, `watch`, etc. are auto-imported by Nuxt, as are components in `app/components/` and composables in `app/composables/`.
 

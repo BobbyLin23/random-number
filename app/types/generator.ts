@@ -6,7 +6,7 @@ export interface ModeOption {
   value: GeneratorMode
   label: string
   description: string
-  icon: string
+  question: string
 }
 
 export interface NumberConfig {

@@ -6,37 +6,41 @@ export default defineConfig({
   theme: {
     colors: {
       'page': cssVar('page'),
-      'panel': cssVar('panel'),
+      'plate': cssVar('plate'),
       'ink': cssVar('ink'),
       'muted': cssVar('ink-muted'),
       'faint': cssVar('ink-faint'),
       'line': cssVar('line'),
       'line-strong': cssVar('line-strong'),
       'accent': cssVar('accent'),
-      'accent-soft': cssVar('accent-soft'),
       'danger': cssVar('danger'),
-      'inverted': {
-        page: cssVar('inverted-page'),
-        ink: cssVar('inverted-ink'),
-        muted: cssVar('inverted-muted'),
+      'field': {
+        DEFAULT: cssVar('field'),
+        ink: cssVar('field-ink'),
+        muted: cssVar('field-muted'),
+        line: cssVar('field-line'),
+        danger: cssVar('field-danger'),
+      },
+      'stub': {
+        DEFAULT: cssVar('stub'),
+        ink: cssVar('stub-ink'),
+        line: cssVar('stub-line'),
+        hover: cssVar('stub-hover'),
       },
     },
     fontFamily: {
       sans: 'var(--font-sans)',
+      serif: 'var(--font-serif)',
     },
   },
   shortcuts: {
-    'container': 'mx-auto w-full max-w-8xl px-4 sm:px-6 lg:px-8',
-    'panel': 'border border-line bg-panel',
-    'field-label': 'block text-xs font-semibold uppercase tracking-[0.14em] text-muted',
+    'container': 'mx-auto w-full max-w-[1120px] px-5 sm:px-8',
+    'field-label': 'block text-[12px] font-medium leading-none text-muted',
     'input':
-      'w-full border border-line bg-page px-3 py-2.5 text-base text-ink outline-none transition-colors duration-200 placeholder:text-faint focus:border-accent',
-    'btn-primary':
-      'inline-flex items-center justify-center gap-2 border border-ink bg-ink px-6 py-3 text-sm font-semibold text-page transition-colors duration-200 hover:border-accent hover:bg-accent active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50',
-    'btn-ghost':
-      'inline-flex items-center justify-center gap-2 border border-line bg-page px-4 py-2.5 text-sm font-medium text-ink transition-colors duration-200 hover:border-ink disabled:cursor-not-allowed disabled:opacity-50',
-    'tab-active': 'border-ink bg-ink text-page hover:bg-ink',
-    'tab-inactive': 'border-line bg-page text-ink hover:border-ink',
+      'w-full border border-line bg-plate px-3 py-2.5 text-[16px] leading-6 text-ink outline-none sm:text-[15px] transition-colors duration-150 placeholder:text-faint hover:border-line-strong focus:border-ink',
+    'btn-quiet':
+      'inline-flex h-9 cursor-pointer items-center justify-center gap-2 border border-line bg-transparent px-3 text-[12px] font-medium text-ink transition-colors duration-150 hover:border-ink hover:bg-plate',
+    'tnum': '[font-variant-numeric:tabular-nums]',
   },
   presets: [presetUno(), presetAttributify(), presetIcons()],
 })
